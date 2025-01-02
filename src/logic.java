@@ -6,7 +6,7 @@ make actual scalable deck chances, maybe use arraylist to simulate drawing a car
 and possible the option to select how many decks you want, and procedurally generate them based on deck size input
 double down function w error prevention
 add betting.
-fix the do while thing so that it doesnt continue when random char input
+
 
 definitely have an end state otherwise you could just keep playing but focus on that later
 
@@ -18,6 +18,8 @@ make choice for deck size chance
 
 fix that you can hit and stand before starting a game. would be fixed by an end state
 lol you can just keep hitting sobsob
+
+maybe make a tester method that assigns the dealer the two inputted chars maybe
  */
 public class logic {
     private static final HashMap<Character, Integer> map = new HashMap<>();
@@ -83,12 +85,12 @@ public class logic {
         }
         System.out.println("\nDealer:");
         dTotal = map.get(dHand[0]) + map.get(dHand[1]);
-        if(dTotal != 21) {
-            System.out.print(dHand[0] + " (" + map.get(dHand[0]) + ") | " + "\uD83C\uDCA0 (?) | "); //this replaces the for loop because the dealer doesnt show their hand !!!!!
+        if(dTotal != 21) { //this replaces the for loop because the dealer doesnt show their hand !!!!!
+            System.out.print(dHand[0] + " (" + map.get(dHand[0]) + ") | " + "\uD83C\uDCA0 (?) | ");
             System.out.println("Total: ??");
-        } else {
-            System.out.print(dHand[0] + " (" + map.get(dHand[0]) + ") | " + dHand[1] + " (" + map.get(dHand[1]) + ") | "); //if dealer hits a blackjack, it reveals the hidden card immediately
-            System.out.println("Total: " + dTotal);
+        } else { //if dealer hits a blackjack, it reveals the hidden card immediately
+            System.out.print(dHand[0] + " (" + map.get(dHand[0]) + ") | " + dHand[1] + " (" + map.get(dHand[1]) + ") | ");
+            System.out.println("Total: " + dTotal + "\nDealer Blackjack!");
         }
         //instant blackjack stuff
         if (total == 21 && dTotal == 21) {
@@ -115,7 +117,7 @@ public class logic {
         }
         total = 0;
         for (int i = 0; i < cardCount; i++) { // if total was over 21 then it sets it to what it is w/o the high ace
-            total += map.get(hand[i]); //!!!!!!!!! probably the worst possible solution to this problem, optimize later :D maybe make a temp hasAce boolean
+            total += map.get(hand[i]); //!!!!!!!!! probably the worst possible solution to this problem, optimize later :D maybe make a temp hasAce boolean instead of just recounting it
         }
         System.out.println("You:");
         for (int i = 0; i < cardCount; i++) {
@@ -126,6 +128,7 @@ public class logic {
             System.out.print("Bust!");
             lose();
         } else if (cardCount == 5) { //checks if the player has five cards (five card charlie rule) that all > 21 and thus wins
+            System.out.print("\nYou have five cards!");
             win();
         } else if (total == 21) {
             stand();
@@ -192,12 +195,12 @@ public class logic {
 
     public void lose() {
         // make an 'end' state so you can't play, just q or c
-        System.out.println("\nYou lose! Would you like to quit or continue?");
+        System.out.println("\nYou lost! Would you like to quit or continue?");
     }
 
     public void push() {
         // make sure for all of the win lose or push it does something with the bet
-        System.out.println("\nTie. Would you like to quit or continue?");
+        System.out.println("\nYou tied! Would you like to quit or continue?");
     }
 
     public void prompt() {

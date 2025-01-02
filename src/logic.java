@@ -63,7 +63,7 @@ public class logic {
         System.out.println("You:");
         for (int i = 0; i < cardCount; i++) {
             total += map.get(hand[i]);
-            System.out.print(hand[i] + " (" + map.get(hand[i]) + ") ");
+            System.out.print(hand[i] + " (" + map.get(hand[i]) + ") | ");
         }
         System.out.print("Total: " + total);
         //dealer
@@ -76,10 +76,8 @@ public class logic {
             dHand[1] = 'a';
         }
         System.out.println("\nDealer:");
-        for (int i = 0; i < dCardCount; i++) {
-            dTotal += map.get(dHand[i]);
-            System.out.print(dHand[i] + " (" + map.get(dHand[i]) + ") ");
-        }
+        dTotal = map.get(dHand[0]) + map.get(dHand[1]);
+        System.out.print(dHand[0] + " (" + map.get(dHand[0]) + ") | " + "\uD83C\uDCA0 (?) | "); //this replaces the for loop because the dealer doesnt show their hand !!!!!
         System.out.println("Total: " + dTotal);
         //instant blackjack stuff
         if (total == 21 && dTotal == 21) {

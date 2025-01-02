@@ -11,13 +11,10 @@ add betting.
 definitely have an end state otherwise you could just keep playing but focus on that later
 
 make sure to have good printing convention so that scanner doesn't have to take empty newlines
-make METHODS for repeated actions yeah condense the code
+make METHODS for repeated actions yeah condense the code and make it MORE READABLE damn
 
 make betting toggleable
 make choice for deck size chance
-
-fix that you can hit and stand before starting a game. would be fixed by an end state
-lol you can just keep hitting sobsob
 
 maybe make a tester method that assigns the dealer the two inputted chars maybe
  */
@@ -55,11 +52,17 @@ public class logic {
     private int totalTwo;
     */
 
+    private static int money;
+    private static int currentBet;
+
+    private boolean state; //false will be end state, true will be ongoing state
+
     logic() {
 
     } // i mean technically i dont need a constructor because it defaults to nothing
 
     public void roll() {
+        state = true;
         cardCount = 2;
         total = 0;
         Arrays.fill(hand, '0'); //clears hand entirely
@@ -141,7 +144,7 @@ public class logic {
         if(dTotal < 17) {
             while (dTotal < 17) { // hits and stands on 17
                 dCardCount++;
-                dHand[dCardCount - 1] = cardGeneration.cardGen();;
+                dHand[dCardCount - 1] = cardGeneration.cardGen();
                 dTotal += map.get(dHand[dCardCount - 1]);
                 if (dTotal > 21) { //checks for ace
                     for (int i = 0; i < dCardCount; i++) {
@@ -189,21 +192,32 @@ public class logic {
     }
 
     public void win() {
-        // make an 'end' state so you can't play, just q or c
+        state = false;
         System.out.println("\nYou won! Would you like to quit or continue?");
     }
 
     public void lose() {
-        // make an 'end' state so you can't play, just q or c
+        state = false;
         System.out.println("\nYou lost! Would you like to quit or continue?");
     }
 
     public void push() {
         // make sure for all of the win lose or push it does something with the bet
+        state = false;
         System.out.println("\nYou tied! Would you like to quit or continue?");
     }
 
     public void prompt() {
+        state = true;
         System.out.print("\nHit, stand, or double down?");
+    }
+
+    public boolean getState() {
+        return state; //false will be end state, true will be ongoing state
+    }
+
+    public void bet(int x) {
+        currentBet = x;
+
     }
 }

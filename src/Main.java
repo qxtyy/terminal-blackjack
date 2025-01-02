@@ -18,23 +18,50 @@ public class Main {
 
             switch (input) {
                 case 'h':
-                    game.hit();
-                    break;
+                    if(game.getState()) {
+                        game.hit();
+                        break;
+                    } else {
+                        System.out.println("You can't do this!");
+                        break;
+                    }
                 case 's':
-                    game.stand();
-                    break;
+                    if(game.getState()) {
+                        game.stand();
+                        break;
+                    } else {
+                        System.out.println("You can't do this!");
+                        break;
+                    }
                 case 'd':
-                    game.doubleDown();
-                    break;
+                    if(game.getState()) {
+                        game.doubleDown();
+                        break;
+                    } else {
+                        System.out.println("You can't do this!");
+                        break;
+                    }
                 case 'q':
                     System.out.println("bye");
                     break;
                 case 'c':
-                    game.roll();
-                    break;
+                    if(!game.getState()) {
+                        game.roll();
+                        break;
+                    } else {
+                        System.out.println("You can't do this!");
+                        break;
+                    }
                 case 'b':
-                    System.out.println("How much would you like to bet?");
-                    bet = in.nextInt();
+                    if(!game.getState()) {
+                        System.out.println("How much would you like to bet?");
+                        bet = in.nextInt();
+                        game.bet(bet);
+                        break;
+                    } else {
+                        System.out.println("You can't do this!");
+                        break;
+                    }
 
                 default:
                     System.out.println("Please enter 'h' (hit), 's' (stand), 'd' (double down), 'q' (quit), 'c' (continue), or 'b' (bet)");

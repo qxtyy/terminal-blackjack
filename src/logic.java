@@ -11,6 +11,7 @@ fix the do while thing so that it doesnt continue when random char input
 definitely have an end state otherwise you could just keep playing but focus on that later
 
 make sure to have good printing convention so that scanner doesn't have to take empty newlines
+make METHODS for repeated actions yeah condense the code
  */
 public class logic {
     private static final HashMap<Character, Integer> map = new HashMap<>();
@@ -56,6 +57,9 @@ public class logic {
         Arrays.fill(hand, '0'); //clears hand entirely
         hand[0] = cardList[(int) (Math.random() * 13)]; //change these for real chance later
         hand[1] = cardList[(int) (Math.random() * 13)];
+        if(hand[0] == 'A' && hand[1] == 0) { // if dealt two aces, change one to little a
+            hand[1] = 'a';
+        }
         System.out.println("You:");
         for (int i = 0; i < cardCount; i++) {
             total += map.get(hand[i]);
@@ -68,6 +72,9 @@ public class logic {
         Arrays.fill(dHand, '0');
         dHand[0] = cardList[(int) (Math.random() * 13)];
         dHand[1] = cardList[(int) (Math.random() * 13)];
+        if(dHand[0] == 'A' && dHand[1] == 0) { // if dealt two aces, change one to little a
+            dHand[1] = 'a';
+        }
         System.out.println("\nDealer:");
         for (int i = 0; i < dCardCount; i++) {
             dTotal += map.get(dHand[i]);
@@ -93,6 +100,7 @@ public class logic {
             for (int i = 0; i < cardCount; i++) {
                 if (hand[i] == 'A') {
                     hand[i] = 'a';
+                    break; //only changes one if there is more than ace :|
                 }
             }
         }
@@ -126,6 +134,7 @@ public class logic {
                 for (int i = 0; i < dCardCount; i++) {
                     if (dHand[i] == 'A') {
                         dHand[i] = 'a';
+                        break;
                     }
                 }
             }

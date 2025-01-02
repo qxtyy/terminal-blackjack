@@ -42,7 +42,7 @@ public class logic {
 
     private char[] hand = {'0', '0', '0', '0', '0'};
     private char[] dHand = {'0', '0', '0', '0', '0'}; // dealer hand
-    private final char[] cardList = {'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'};
+    public static final char[] cardList = {'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'};
     private int total;
     private int cardCount;
     private int dTotal; //dealer total
@@ -61,8 +61,8 @@ public class logic {
         cardCount = 2;
         total = 0;
         Arrays.fill(hand, '0'); //clears hand entirely
-        hand[0] = cardGen(); //change these for real chance later
-        hand[1] = cardGen();
+        hand[0] = cardGeneration.cardGen(); //change these for real chance later
+        hand[1] = cardGeneration.cardGen();
         if(hand[0] == 'A' && hand[1] == 0) { // if dealt two aces, change one to little a
             hand[1] = 'a';
         }
@@ -76,15 +76,20 @@ public class logic {
         dCardCount = 2;
         dTotal = 0;
         Arrays.fill(dHand, '0');
-        dHand[0] = cardGen();
-        dHand[1] = cardGen();
+        dHand[0] = cardGeneration.cardGen();
+        dHand[1] = cardGeneration.cardGen();
         if(dHand[0] == 'A' && dHand[1] == 0) { // if dealt two aces, change one to little a
             dHand[1] = 'a';
         }
         System.out.println("\nDealer:");
         dTotal = map.get(dHand[0]) + map.get(dHand[1]);
-        System.out.print(dHand[0] + " (" + map.get(dHand[0]) + ") | " + "\uD83C\uDCA0 (?) | "); //this replaces the for loop because the dealer doesnt show their hand !!!!!
-        System.out.println("Total: ??");
+        if(dTotal != 21) {
+            System.out.print(dHand[0] + " (" + map.get(dHand[0]) + ") | " + "\uD83C\uDCA0 (?) | "); //this replaces the for loop because the dealer doesnt show their hand !!!!!
+            System.out.println("Total: ??");
+        } else {
+            System.out.print(dHand[0] + " (" + map.get(dHand[0]) + ") | " + dHand[1] + " (" + map.get(dHand[1]) + ") | "); //if dealer hits a blackjack, it reveals the hidden card immediately
+            System.out.println("Total: " + dTotal);
+        }
         //instant blackjack stuff
         if (total == 21 && dTotal == 21) {
             push();
@@ -98,7 +103,7 @@ public class logic {
 
     public void hit() {
         cardCount++;
-        hand[cardCount - 1] = cardGen();
+        hand[cardCount - 1] = cardGeneration.cardGen();
         total += map.get(hand[cardCount - 1]);
         if (total > 21) { //checks for ace
             for (int i = 0; i < cardCount; i++) {
@@ -133,7 +138,7 @@ public class logic {
         if(dTotal < 17) {
             while (dTotal < 17) { // hits and stands on 17
                 dCardCount++;
-                dHand[dCardCount - 1] = cardGen();
+                dHand[dCardCount - 1] = cardGeneration.cardGen();;
                 dTotal += map.get(dHand[dCardCount - 1]);
                 if (dTotal > 21) { //checks for ace
                     for (int i = 0; i < dCardCount; i++) {
@@ -145,7 +150,7 @@ public class logic {
                 }
                 dTotal = 0;
                 for (int i = 0; i < dCardCount; i++) {
-                    dTotal += map.get(dHand[i]); //!!!!!!!!!
+                    dTotal += map.get(dHand[i]); //!!!!!!!!! fix
                 }
                 System.out.println("\nDealer:");
                 for (int i = 0; i < dCardCount; i++) {
@@ -170,9 +175,11 @@ public class logic {
         }
     }
 
+    /*
     private char cardGen() { // make good later
         return cardList[(int) (Math.random() * 13)];
     }
+    */
 
     public void doubleDown() {
         // yeah make it so you can only double down if two of same card, print "u cant" otherwise

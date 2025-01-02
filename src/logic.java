@@ -140,9 +140,9 @@ public class logic {
             System.out.println("Total: " + dTotal);
         }
         //win lose or push
-        if (dCardCount > 21 || dCardCount < cardCount) {
+        if (dTotal > 21 || dTotal < total) {
             win();
-        } else if (dCardCount > cardCount) {
+        } else if (dTotal > total) {
             lose();
         } else {
             push();

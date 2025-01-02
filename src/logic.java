@@ -6,9 +6,8 @@ make actual scalable deck chances, maybe use arraylist to simulate drawing a car
 and possible the option to select how many decks you want, and procedurally generate them based on deck size input
 double down function w error prevention
 add betting.
-dealer logic too, make it stand on 17
+fix the do while thing so that it doesnt continue when random char input
 
-do make it so that you can input q or c for continuing or quitting
 definitely have an end state otherwise you could just keep playing but focus on that later
 
 make sure to have good printing convention so that scanner doesn't have to take empty newlines
@@ -57,28 +56,31 @@ public class logic {
         Arrays.fill(hand, '0'); //clears hand entirely
         hand[0] = cardList[(int) (Math.random() * 13)]; //change these for real chance later
         hand[1] = cardList[(int) (Math.random() * 13)];
-        System.out.println("You:\n");
+        System.out.println("You:");
         for (int i = 0; i < cardCount; i++) {
             total += map.get(hand[i]);
             System.out.print(hand[i] + " (" + map.get(hand[i]) + ") ");
         }
+        System.out.print("Total: " + total);
         //dealer
         dCardCount = 2;
         dTotal = 0;
         Arrays.fill(dHand, '0');
         dHand[0] = cardList[(int) (Math.random() * 13)];
         dHand[1] = cardList[(int) (Math.random() * 13)];
-        System.out.println("\nDealer:\n");
+        System.out.println("\nDealer:");
         for (int i = 0; i < dCardCount; i++) {
             dTotal += map.get(dHand[i]);
             System.out.print(dHand[i] + " (" + map.get(dHand[i]) + ") ");
         }
+        System.out.println("Total: " + dTotal);
         //instant blackjack stuff
         if (total == 21 && dTotal == 21) {
             push();
         } else if (dTotal == 21) {
             lose();
         } else if (total == 21) {
+            System.out.print("Blackjack!");
             win();
         }
     }
@@ -98,12 +100,13 @@ public class logic {
         for (int i = 0; i < cardCount; i++) { // if total was over 21 then it sets it to what it is w/o the high ace
             total += map.get(hand[i]); //!!!!!!!!! probably the worst possible solution to this problem, optimize later :D maybe make a temp hasAce boolean
         }
-        System.out.println("\nYou:\n");
+        System.out.println("\nYou:");
         for (int i = 0; i < cardCount; i++) {
             System.out.print(hand[i] + " (" + map.get(hand[i]) + ") ");
         }
+        System.out.println("Total: " + total);
         if (total > 21) { //checks if the player goes over 21 and thus loses
-            System.out.println("You bust!");
+            System.out.print("You bust!");
             lose();
         } else if (cardCount == 5) { //checks if the player has five cards (five card charlie rule) that all > 21 and thus wins
             win();
@@ -114,10 +117,10 @@ public class logic {
         }
     }
 
-    public void stand() { //this is where the majority of the dealer logic will reside, just hit and stand on 17 or bust, then check if hand > dHand or hand < dHand else it's a tie (push for betting)
-        while (dCardCount < 17) { // hits and stands on 17
+    public void stand() {
+        while (dTotal < 17) { // hits and stands on 17
             dCardCount++;
-            dHand[cardCount - 1] = cardList[(int) (Math.random() * 13)];
+            dHand[dCardCount - 1] = cardList[(int) (Math.random() * 13)];
             dTotal += map.get(dHand[dCardCount - 1]);
             if (dTotal > 21) { //checks for ace
                 for (int i = 0; i < dCardCount; i++) {
@@ -130,10 +133,11 @@ public class logic {
             for (int i = 0; i < dCardCount; i++) {
                 dTotal += map.get(dHand[i]); //!!!!!!!!!
             }
-            System.out.println("\nDealer:\n");
+            System.out.println("\nDealer:");
             for (int i = 0; i < dCardCount; i++) {
                 System.out.print(dHand[i] + " (" + map.get(dHand[i]) + ") ");
             }
+            System.out.println("Total: " + dTotal);
         }
         //win lose or push
         if (dCardCount > 21 || dCardCount < cardCount) {
@@ -152,20 +156,20 @@ public class logic {
 
     public void win() {
         // make an 'end' state so you can't play, just q or c
-        System.out.println("You won! Would you like to quit or continue?");
+        System.out.println("\nYou won! Would you like to quit or continue?");
     }
 
     public void lose() {
         // make an 'end' state so you can't play, just q or c
-        System.out.println("You lose! Would you like to quit or continue?");
+        System.out.println("\nYou lose! Would you like to quit or continue?");
     }
 
     public void push() {
         // make sure for all of the win lose or push it does something with the bet
-        System.out.println("Tie. Would you like to quit or continue?");
+        System.out.println("\nTie. Would you like to quit or continue?");
     }
 
     public void prompt() {
-        System.out.println("Hit, stand, or double down?");
+        System.out.println("\nHit, stand, or double down?");
     }
 }

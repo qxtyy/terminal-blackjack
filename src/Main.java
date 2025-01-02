@@ -5,10 +5,11 @@ public class Main {
         Scanner in = new Scanner(System.in);
         logic game = new logic();
         char input;
+        System.out.println("h = hit, s = stand, d = double down (not working yet), q = quit, c = continue (and start), b = bet\ndealer stands on 17");
 
         do {
-            game.roll();
-            System.out.print("Enter a character: ");
+            //game.roll(); // this runs anyway even if a random character is input but ig thats ok
+            System.out.print("\nEnter a character: ");
             input = in.next().charAt(0);
             // bet = in.nextInt(); // make this work somehow by making a bet method w/ parameter
 

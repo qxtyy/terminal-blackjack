@@ -7,10 +7,6 @@ and possible the option to select how many decks you want, and procedurally gene
 double down function w error prevention
 add betting.
 
-
-definitely have an end state otherwise you could just keep playing but focus on that later
-
-make sure to have good printing convention so that scanner doesn't have to take empty newlines
 make METHODS for repeated actions yeah condense the code and make it MORE READABLE damn
 
 make betting toggleable
@@ -62,7 +58,6 @@ public class logic {
     } // i mean technically i dont need a constructor because it defaults to nothing
 
     public void roll() {
-        state = true;
         cardCount = 2;
         total = 0;
         Arrays.fill(hand, '0'); //clears hand entirely
@@ -103,6 +98,8 @@ public class logic {
         } else if (total == 21) {
             System.out.print("Blackjack!");
             win();
+        } else {
+            prompt();
         }
     }
 

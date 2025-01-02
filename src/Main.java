@@ -5,6 +5,7 @@ public class Main {
         Scanner in = new Scanner(System.in);
         logic game = new logic();
         char input;
+        int bet;
         System.out.println("h = hit, s = stand, d = double down (not working yet), q = quit, c = continue (and start), b = bet\ndealer stands on 17");
 
         do {
@@ -31,6 +32,8 @@ public class Main {
                     break;
                 case 'b':
                     System.out.println("How much would you like to bet?");
+                    bet = in.nextInt();
+
                 default:
                     System.out.println("Please enter 'h' (hit), 's' (stand), 'd' (double down), 'q' (quit), 'c' (continue), or 'b' (bet)");
             }

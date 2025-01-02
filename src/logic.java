@@ -12,6 +12,12 @@ definitely have an end state otherwise you could just keep playing but focus on 
 
 make sure to have good printing convention so that scanner doesn't have to take empty newlines
 make METHODS for repeated actions yeah condense the code
+
+make betting toggleable
+make choice for deck size chance
+
+fix that you can hit and stand before starting a game. would be fixed by an end state
+lol you can just keep hitting sobsob
  */
 public class logic {
     private static final HashMap<Character, Integer> map = new HashMap<>();
@@ -55,8 +61,8 @@ public class logic {
         cardCount = 2;
         total = 0;
         Arrays.fill(hand, '0'); //clears hand entirely
-        hand[0] = cardList[(int) (Math.random() * 13)]; //change these for real chance later
-        hand[1] = cardList[(int) (Math.random() * 13)];
+        hand[0] = cardGen(); //change these for real chance later
+        hand[1] = cardGen();
         if(hand[0] == 'A' && hand[1] == 0) { // if dealt two aces, change one to little a
             hand[1] = 'a';
         }
@@ -70,15 +76,15 @@ public class logic {
         dCardCount = 2;
         dTotal = 0;
         Arrays.fill(dHand, '0');
-        dHand[0] = cardList[(int) (Math.random() * 13)];
-        dHand[1] = cardList[(int) (Math.random() * 13)];
+        dHand[0] = cardGen();
+        dHand[1] = cardGen();
         if(dHand[0] == 'A' && dHand[1] == 0) { // if dealt two aces, change one to little a
             dHand[1] = 'a';
         }
         System.out.println("\nDealer:");
         dTotal = map.get(dHand[0]) + map.get(dHand[1]);
         System.out.print(dHand[0] + " (" + map.get(dHand[0]) + ") | " + "\uD83C\uDCA0 (?) | "); //this replaces the for loop because the dealer doesnt show their hand !!!!!
-        System.out.println("Total: " + dTotal);
+        System.out.println("Total: ??");
         //instant blackjack stuff
         if (total == 21 && dTotal == 21) {
             push();
@@ -92,7 +98,7 @@ public class logic {
 
     public void hit() {
         cardCount++;
-        hand[cardCount - 1] = cardList[(int) (Math.random() * 13)];
+        hand[cardCount - 1] = cardGen();
         total += map.get(hand[cardCount - 1]);
         if (total > 21) { //checks for ace
             for (int i = 0; i < cardCount; i++) {
@@ -106,13 +112,13 @@ public class logic {
         for (int i = 0; i < cardCount; i++) { // if total was over 21 then it sets it to what it is w/o the high ace
             total += map.get(hand[i]); //!!!!!!!!! probably the worst possible solution to this problem, optimize later :D maybe make a temp hasAce boolean
         }
-        System.out.println("\nYou:");
+        System.out.println("You:");
         for (int i = 0; i < cardCount; i++) {
-            System.out.print(hand[i] + " (" + map.get(hand[i]) + ") ");
+            System.out.print(hand[i] + " (" + map.get(hand[i]) + ") | ");
         }
         System.out.println("Total: " + total);
         if (total > 21) { //checks if the player goes over 21 and thus loses
-            System.out.print("You bust!");
+            System.out.print("Bust!");
             lose();
         } else if (cardCount == 5) { //checks if the player has five cards (five card charlie rule) that all > 21 and thus wins
             win();
@@ -124,25 +130,33 @@ public class logic {
     }
 
     public void stand() {
-        while (dTotal < 17) { // hits and stands on 17
-            dCardCount++;
-            dHand[dCardCount - 1] = cardList[(int) (Math.random() * 13)];
-            dTotal += map.get(dHand[dCardCount - 1]);
-            if (dTotal > 21) { //checks for ace
-                for (int i = 0; i < dCardCount; i++) {
-                    if (dHand[i] == 'A') {
-                        dHand[i] = 'a';
-                        break;
+        if(dTotal < 17) {
+            while (dTotal < 17) { // hits and stands on 17
+                dCardCount++;
+                dHand[dCardCount - 1] = cardGen();
+                dTotal += map.get(dHand[dCardCount - 1]);
+                if (dTotal > 21) { //checks for ace
+                    for (int i = 0; i < dCardCount; i++) {
+                        if (dHand[i] == 'A') {
+                            dHand[i] = 'a';
+                            break;
+                        }
                     }
                 }
+                dTotal = 0;
+                for (int i = 0; i < dCardCount; i++) {
+                    dTotal += map.get(dHand[i]); //!!!!!!!!!
+                }
+                System.out.println("\nDealer:");
+                for (int i = 0; i < dCardCount; i++) {
+                    System.out.print(dHand[i] + " (" + map.get(dHand[i]) + ") | ");
+                }
+                System.out.println("Total: " + dTotal);
             }
-            dTotal = 0;
-            for (int i = 0; i < dCardCount; i++) {
-                dTotal += map.get(dHand[i]); //!!!!!!!!!
-            }
+        } else { //reveals dealer hand if over 17
             System.out.println("\nDealer:");
             for (int i = 0; i < dCardCount; i++) {
-                System.out.print(dHand[i] + " (" + map.get(dHand[i]) + ") ");
+                System.out.print(dHand[i] + " (" + map.get(dHand[i]) + ") | ");
             }
             System.out.println("Total: " + dTotal);
         }
@@ -156,6 +170,9 @@ public class logic {
         }
     }
 
+    private char cardGen() { // make good later
+        return cardList[(int) (Math.random() * 13)];
+    }
 
     public void doubleDown() {
         // yeah make it so you can only double down if two of same card, print "u cant" otherwise
@@ -177,6 +194,6 @@ public class logic {
     }
 
     public void prompt() {
-        System.out.println("\nHit, stand, or double down?");
+        System.out.print("\nHit, stand, or double down?");
     }
 }

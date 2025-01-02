@@ -48,8 +48,11 @@ public class logic {
     private int totalTwo;
     */
 
-    private static int money;
+    private static int money = 100; //starting money 100? idk
     private static int currentBet;
+
+    private boolean bettingEnabled;
+    private int deckSize;
 
     private boolean state; //false will be end state, true will be ongoing state
 
@@ -189,19 +192,40 @@ public class logic {
     }
 
     public void win() {
-        state = false;
-        System.out.println("\nYou won! Would you like to quit or continue?");
+        if(bettingEnabled) {
+            state = false;
+            money += currentBet * 2;
+            currentBet = 0;
+            System.out.println("\nYou won! Would you like to quit or continue?");
+        } else {
+            state = false;
+            System.out.println("\nYou won! Would you like to quit or continue?");
+        }
     }
 
     public void lose() {
-        state = false;
-        System.out.println("\nYou lost! Would you like to quit or continue?");
+        if(bettingEnabled) {
+            state = false;
+            money -= currentBet;
+            currentBet = 0;
+            checkMoney();
+            System.out.println("\nYou won! Would you like to quit or continue?");
+        } else {
+            state = false;
+            System.out.println("\nYou won! Would you like to quit or continue?");
+        }
     }
 
     public void push() {
-        // make sure for all of the win lose or push it does something with the bet
-        state = false;
-        System.out.println("\nYou tied! Would you like to quit or continue?");
+        if(bettingEnabled) {
+            state = false;
+            currentBet = 0;
+            checkMoney();
+            System.out.println("\nYou tied! Would you like to quit or continue?");
+        } else {
+            state = false;
+            System.out.println("\nYou tied! Would you like to quit or continue?");
+        }
     }
 
     public void prompt() {
@@ -216,5 +240,22 @@ public class logic {
     public void bet(int x) {
         currentBet = x;
 
+    }
+    public int getMoney() {
+        return money;
+    }
+    public void checkMoney() {
+        if(money < 1) {
+            System.out.println("you lost all ur money. ur broke kid");
+            Main.input = 'q';
+        }
+    }
+    public void checkBet() {
+        if(money-currentBet < 0) { //you cant bet this much money
+            System.out.println("You can't bet this much money!");
+        }
+    }
+    public void setBettingEnabled(boolean x) {
+        bettingEnabled = x;
     }
 }

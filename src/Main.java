@@ -1,20 +1,21 @@
 import java.util.Scanner;
 
 public class Main {
+
+    public static char input;
+
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         logic game = new logic();
 
-        char input;
+        // char input;
         int bet;
 
         System.out.println("h = hit, s = stand, d = double down (not working yet), q = quit, c = continue, b = bet\ndealer stands on 17");
         game.roll();
         do {
-
             System.out.print("\nEnter a character: ");
             input = in.next().charAt(0);
-            // bet = in.nextInt(); // make this work somehow by making a bet method w/ parameter
 
             switch (input) {
                 case 'h':

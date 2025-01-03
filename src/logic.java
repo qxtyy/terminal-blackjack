@@ -13,6 +13,9 @@ make betting toggleable
 make choice for deck size chance
 
 maybe make a tester method that assigns the dealer the two inputted chars maybe
+
+maybe make an interface before immediately starting a game ? so you can enable betting before
+the game starts
  */
 public class logic {
     private static final HashMap<Character, Integer> map = new HashMap<>();
@@ -194,7 +197,7 @@ public class logic {
     public void win() {
         if(bettingEnabled) {
             state = false;
-            money += currentBet * 2;
+            money += currentBet;
             currentBet = 0;
             System.out.println("\nYou won! Would you like to quit or continue?");
         } else {
@@ -208,11 +211,15 @@ public class logic {
             state = false;
             money -= currentBet;
             currentBet = 0;
-            checkMoney();
-            System.out.println("\nYou won! Would you like to quit or continue?");
+            if(money < 1) {
+                System.out.println("you lost all ur money. ur broke kid");
+                Main.input = 'q';
+            } else {
+                System.out.println("\nYou lost! Would you like to quit or continue?");
+            }
         } else {
             state = false;
-            System.out.println("\nYou won! Would you like to quit or continue?");
+            System.out.println("\nYou lost! Would you like to quit or continue?");
         }
     }
 
@@ -220,8 +227,12 @@ public class logic {
         if(bettingEnabled) {
             state = false;
             currentBet = 0;
-            checkMoney();
-            System.out.println("\nYou tied! Would you like to quit or continue?");
+            if(money < 1) {
+                System.out.println("you lost all ur money. ur broke kid");
+                Main.input = 'q';
+            } else {
+                System.out.println("\nYou tied! Would you like to quit or continue?");
+            }
         } else {
             state = false;
             System.out.println("\nYou tied! Would you like to quit or continue?");
@@ -239,23 +250,32 @@ public class logic {
 
     public void bet(int x) {
         currentBet = x;
-
+        if(money-currentBet < 0 || currentBet < 1) { //you cant bet this much money
+            System.out.println("You can't bet this much money!");
+        } //kinda want to make it so if you enter an invalid bet amount it automatically reprompts and gets a valid bet or maybe not idk
     }
     public int getMoney() {
-        return money;
+        return money - currentBet;
     }
+    /*
     public void checkMoney() {
         if(money < 1) {
-            System.out.println("you lost all ur money. ur broke kid");
+            System.out.println(" you lost all ur money. ur broke kid");
             Main.input = 'q';
         }
     }
-    public void checkBet() {
-        if(money-currentBet < 0) { //you cant bet this much money
-            System.out.println("You can't bet this much money!");
+    */
+
+    public void toggleBetting() {
+        if(bettingEnabled) {
+            bettingEnabled = false;
+            System.out.println("Betting has been disabled. ");
+        } else {
+            bettingEnabled = true;
+            System.out.println("Betting has been enabled. ");
         }
     }
-    public void setBettingEnabled(boolean x) {
-        bettingEnabled = x;
+    public boolean getBetState() {
+        return bettingEnabled;
     }
 }

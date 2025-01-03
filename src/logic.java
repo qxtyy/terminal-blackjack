@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.HashMap;
 /*
 to do:
@@ -66,7 +65,6 @@ public class logic {
     public void roll() {
         cardCount = 2; //resets card count to 2
         total = 0; //resets total to 0
-        Arrays.fill(hand, '0'); //clears hand entirely
         hand[0] = cardGeneration.cardGen(); //change these for real chance later
         hand[1] = cardGeneration.cardGen();
         if(hand[0] == 'A' && hand[1] == 0) { // if dealt two aces, change one to little a (1)
@@ -81,7 +79,6 @@ public class logic {
         //dealer
         dCardCount = 2;
         dTotal = 0;
-        Arrays.fill(dHand, '0');
         dHand[0] = cardGeneration.cardGen();
         dHand[1] = cardGeneration.cardGen();
         if(dHand[0] == 'A' && dHand[1] == 0) {

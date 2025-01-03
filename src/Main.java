@@ -66,7 +66,7 @@ public class Main {
                                 in.next(); //takes next line
                             }
                         }
-                        break;
+                        break; // i dont know how the problem arose but a break here felt necessary and it fixed it somehow
                     } else {
                         System.out.println("You can't bet now!");
                         break;

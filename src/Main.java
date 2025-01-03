@@ -8,11 +8,12 @@ public class Main {
         Scanner in = new Scanner(System.in);
         logic game = new logic();
 
-        // char input;
         int bet;
 
-        System.out.println("h = hit, s = stand, d = double down (not working yet), q = quit, c = continue, e = enable betting, b = bet, m = check money\ndealer stands on 17");
-        game.roll();
+        System.out.println("General: c = continue / start new game, q = quit program");
+        System.out.println("Betting: e = enable betting, b = bet, m = check money balance (you can only bet and enable betting before starting a game)");
+        System.out.println("Game: h = hit, s = stand, d = double down (not working atm) ");
+        System.out.println("Dealer stands on 17, Blackjack pays 3 to 2");
         do {
             System.out.print("\nEnter a character: ");
             input = in.next().charAt(0);
@@ -21,62 +22,68 @@ public class Main {
                 case 'h':
                     if(game.getState()) {
                         game.hit();
-                        break;
                     } else {
-                        System.out.println("You can't do this!");
-                        break;
+                        System.out.println("You can't hit without starting a game!");
                     }
+                    break;
                 case 's':
                     if(game.getState()) {
                         game.stand();
-                        break;
                     } else {
-                        System.out.println("You can't do this!");
-                        break;
+                        System.out.println("You can't stand without starting a game!");
                     }
+                    break;
                 case 'd':
                     if(game.getState()) {
                         game.doubleDown();
-                        break;
                     } else {
-                        System.out.println("You can't do this!");
-                        break;
+                        System.out.println("You can't double down without starting a game!");
                     }
+                    break;
                 case 'q':
                     System.out.println("bye");
                     break;
                 case 'c':
                     if(!game.getState()) {
                         game.roll();
-                        break;
                     } else {
-                        System.out.println("You can't do this!");
-                        break;
+                        System.out.println("You can't start a new game while in a game!");
                     }
+                    break;
                 case 'b':
                     if(!game.getState() && game.getBetState()) { //only bets if there is no ongoing game and betting is enabled
-                        System.out.println("How much would you like to bet?");
-                        bet = in.nextInt();
-                        game.bet(bet);
-                        game.roll();
+                        boolean validInput = false;
+                        while (!validInput) { //only takes valid input
+                            System.out.println("How much would you like to bet?");
+                            if (in.hasNextInt()) {
+                                bet = in.nextInt();
+                                validInput = true; // ends loop.
+                                game.bet(bet);
+                                game.roll();
+                                break;
+                            } else {
+                                System.out.println("Invalid bet. Please enter a valid bet. ");
+                                in.next(); //takes next line
+                            }
+                        }
                         break;
                     } else {
-                        System.out.println("You can't do this!");
+                        System.out.println("You can't bet now!");
                         break;
                     }
+
                 case 'e':
                     if(!game.getState()) {
                         game.toggleBetting();
-                        break;
                     } else {
-                        System.out.println("You can't do this!");
-                        break;
+                        System.out.println("You can't toggle betting during a game!");
                     }
+                    break;
                 case 'm':
                     System.out.println("Current balance: " + game.getMoney() + "₪");
                     break;
                 default:
-                    System.out.println("Please enter 'h' (hit), 's' (stand), 'd' (double down), 'q' (quit), 'c' (continue), or 'b' (bet)");
+                    System.out.println("Please enter a valid character, refer to beginning.");
             }
 
         } while (input != 'q');

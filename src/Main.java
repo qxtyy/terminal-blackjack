@@ -11,7 +11,7 @@ public class Main {
         int bet;
 
         System.out.println("General: c = continue / start new game, q = quit program");
-        System.out.println("Betting: e = enable betting, b = bet, m = check money balance (you can only bet and enable betting before starting a game)");
+        System.out.println("Betting: b = bet (optional), m = check money balance (you can only bet before starting a game)");
         System.out.println("Game: h = hit, s = stand, d = double down (not working atm) ");
         System.out.println("Dealer stands on 17, Blackjack pays 3 to 2");
         do {
@@ -51,7 +51,7 @@ public class Main {
                     }
                     break;
                 case 'b':
-                    if(!game.getState() && game.getBetState()) { //only bets if there is no ongoing game and betting is enabled
+                    if(!game.getState()) { //only bets if there is no ongoing game
                         boolean validInput = false;
                         while (!validInput) { //only takes valid input
                             System.out.println("How much would you like to bet?");
@@ -68,17 +68,10 @@ public class Main {
                         }
                         break; // i dont know how the problem arose but a break here felt necessary and it fixed it somehow
                     } else {
-                        System.out.println("You can't bet now!");
+                        System.out.println("You can't bet during a game!");
                         break;
                     }
 
-                case 'e':
-                    if(!game.getState()) {
-                        game.toggleBetting();
-                    } else {
-                        System.out.println("You can't toggle betting during a game!");
-                    }
-                    break;
                 case 'm':
                     System.out.println("Current balance: " + game.getMoney() + "₪");
                     break;

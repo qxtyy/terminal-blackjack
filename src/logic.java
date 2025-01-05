@@ -53,7 +53,6 @@ public class logic {
     private static int money = 100; //starting money 100? idk
     private static int currentBet;
 
-    private boolean bettingEnabled;
     private int deckSize;
 
     private boolean state; //false will be end state, true will be ongoing state
@@ -67,7 +66,7 @@ public class logic {
         total = 0; //resets total to 0
         hand[0] = cardGeneration.cardGen(); //change these for real chance later
         hand[1] = cardGeneration.cardGen();
-        if(hand[0] == 'A' && hand[1] == 0) { // if dealt two aces, change one to little a (1)
+        if(hand[0] == 'A' && hand[1] == 'A') { // if dealt two aces, change one to little a (1)
             hand[1] = 'a';
         }
         System.out.println("You:");
@@ -81,7 +80,7 @@ public class logic {
         dTotal = 0;
         dHand[0] = cardGeneration.cardGen();
         dHand[1] = cardGeneration.cardGen();
-        if(dHand[0] == 'A' && dHand[1] == 0) {
+        if(dHand[0] == 'A' && dHand[1] == 'A') {
             dHand[1] = 'a';
         }
         System.out.println("\nDealer:");
@@ -182,30 +181,18 @@ public class logic {
         }
     }
 
-    /*
-    private char cardGen() { // make good later
-        return cardList[(int) (Math.random() * 13)];
-    }
-    */
-
     public void doubleDown() {
         // yeah make it so you can only double down if two of same card, print "u cant" otherwise
     }
 
     public void win() {
-        if(bettingEnabled) {
             state = false; //toggles state to off, no game ongoing
             money += currentBet; //adds the bet to the money, effectively doubles the money input
             currentBet = 0; //resets the current bet
             System.out.println("\nYou won! Would you like to quit or continue?");
-        } else {
-            state = false;
-            System.out.println("\nYou won! Would you like to quit or continue?");
-        }
     }
 
     public void lose() {
-        if(bettingEnabled) {
             state = false;
             money -= currentBet; //subtracts the current bet from the total money if lost
             currentBet = 0;
@@ -215,10 +202,6 @@ public class logic {
             } else { //but if they do have money they can keep playing
                 System.out.println("\nYou lost! Would you like to quit or continue?");
             }
-        } else {
-            state = false;
-            System.out.println("\nYou lost! Would you like to quit or continue?");
-        }
     }
 
     public void push() {
@@ -244,26 +227,5 @@ public class logic {
     }
     public int getMoney() {
         return money - currentBet; //returns the effective money balance
-    }
-    /*
-    public void checkMoney() {
-        if(money < 1) {
-            System.out.println(" you lost all ur money. ur broke kid");
-            Main.input = 'q';
-        }
-    }
-    */
-
-    public void toggleBetting() {
-        if(bettingEnabled) {
-            bettingEnabled = false;
-            System.out.println("Betting has been disabled."); //disables betting if it's enabled
-        } else {
-            bettingEnabled = true;
-            System.out.println("Betting has been enabled."); //enables betting if it's disabled
-        }
-    }
-    public boolean getBetState() {
-        return bettingEnabled;
     }
 }

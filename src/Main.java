@@ -10,9 +10,9 @@ public class Main {
 
         int bet;
 
-        System.out.println("General: c = continue / start new game, q = quit program");
+        System.out.println("General: c = continue / start new game, q = quit program, g = guide/help");
         System.out.println("Betting: b = bet (optional), m = check money balance (you can only bet before starting a game)");
-        System.out.println("Game: h = hit, s = stand, d = double down (not working atm) ");
+        System.out.println("Game: h = hit, s = stand, d = double down, p = split (wip) ");
         System.out.println("Dealer stands on 17, Blackjack pays 3 to 2");
         do {
             System.out.print("\nEnter a character: ");
@@ -71,7 +71,12 @@ public class Main {
                         System.out.println("You can't bet during a game!");
                         break;
                     }
-
+                /*case 'p':
+                    //game.split();
+                    //break;*/
+                case 'g':
+                    System.out.println(); //aaaaaaaa
+                    break;
                 case 'm':
                     System.out.println("Current balance: " + game.getMoney() + "₪");
                     break;

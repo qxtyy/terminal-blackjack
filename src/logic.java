@@ -1,41 +1,15 @@
-import java.util.HashMap;
 /*
 to do:
-make actual scalable deck chances, maybe use arraylist to simulate drawing a card then removing that from the pool that'd be really easy. just (int)(math.random *53) then remove that index and keep playing. maybe even going further as to using the unicode card characters that'd be cool
-and possible the option to select how many decks you want, and procedurally generate them based on deck size input
-double down function w error prevention
-
-
 make METHODS for repeated actions yeah condense the code and make it MORE READABLE damn
 
-make choice for deck size chance
+these naming conventions....
 
-maybe make a tester method that assigns the dealer the two inputted chars maybe
+
  */
 public class logic {
-    private static final HashMap<Character, Integer> map = new HashMap<>();
 
-    static {
-        map.put('K', 10);
-        map.put('Q', 10);
-        map.put('J', 10);
-        map.put('T', 10);
-        map.put('9', 9);
-        map.put('8', 8);
-        map.put('7', 7);
-        map.put('6', 6);
-        map.put('5', 5);
-        map.put('4', 4);
-        map.put('3', 3);
-        map.put('2', 2);
-        map.put('A', 11);
-        map.put('a', 1);
-        map.put('0', 0);
-    }
-
-    private char[] hand = {'0', '0', '0', '0', '0'};
-    private char[] dHand = {'0', '0', '0', '0', '0'}; // dealer hand
-    public static final char[] cardList = {'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'};
+    private String[] hand = {"0", "0", "0", "0", "0"};
+    private String[] dHand = {"0", "0", "0", "0", "0"}; // dealer hand
     private int total; //player card value total
     private int cardCount; //player card count
     private int dTotal; //dealer total
@@ -46,44 +20,45 @@ public class logic {
     private int totalTwo;
     */
 
-    private static int money = 100; //starting money 100? idk
+    private static int money = 100; //starting money 100? IDK
     private static int currentBet;
 
-    private int deckSize;
+    public static int deckSize = 1; //default deck size is one!
 
     private boolean state; //false will be end state, true will be ongoing state
 
     logic() {
-
-    } // i mean technically i dont need a constructor because it defaults to nothing
+    } // unnecessary
 
     public void roll() {
+        deck.shuffleDeck(); //initializes (or shuffles) deck at each roll
         cardCount = 2; //resets card count to 2
         total = 0; //resets total to 0
-        hand[0] = cardGeneration.cardGen(); //change these for real chance later
-        hand[1] = cardGeneration.cardGen();
-        if(hand[0] == 'A' && hand[1] == 'A') { // if dealt two aces, change one to little a (1)
-            hand[1] = 'a';
+
+        hand[0] = deck.pullCard();
+        hand[1] = deck.pullCard();
+        if(hand[0].charAt(0) == 'A' && hand[1].charAt(0) == 'A') { // if dealt two aces, change one to little a (1)
+            hand[1] = hand[1].replace('A','a');
         }
-        total = map.get(hand[0]) + map.get(hand[1]);
+        total = deck.getValue(hand[0]) + deck.getValue(hand[1]);
         System.out.println("You:");
-        System.out.print(hand[0] + " (" + map.get(hand[0]) + ") | " + hand[1] + " (" + map.get(hand[1]) + ") | ");
+        System.out.print(hand[0] + " (" + deck.getValue(hand[0]) + ") | " + hand[1] + " (" + deck.getValue(hand[1]) + ") | ");
         System.out.print("Total: " + total); // prints total
         //dealer
         dCardCount = 2;
         dTotal = 0;
-        dHand[0] = cardGeneration.cardGen();
-        dHand[1] = cardGeneration.cardGen();
-        if(dHand[0] == 'A' && dHand[1] == 'A') {
-            dHand[1] = 'a';
+        dHand[0] = deck.pullCard();
+        dHand[1] = deck.pullCard();
+        if(dHand[0].charAt(0) == 'A' && dHand[1].charAt(0) == 'A') {
+            dHand[1] = dHand[1].replace('A','a');
         }
-        dTotal = map.get(dHand[0]) + map.get(dHand[1]); //adds total
+        dTotal = deck.getValue(dHand[0]) + deck.getValue(dHand[1]); //adds total
         System.out.println("\nDealer:");
         if(dTotal != 21) { // if the dealer doesn't blackjack, then it leaves the card hidden
-            System.out.print(dHand[0] + " (" + map.get(dHand[0]) + ") | " + "\uD83C\uDCA0 (?) | ");
+            System.out.print(dHand[0] + " (" + deck.getValue(dHand[0]) + ") | " + "\uD83C\uDCA0 (?) | ");
             System.out.println("Total: ??");
         } else { //if dealer hits a blackjack, it reveals the hidden card immediately
-            System.out.print(dHand[0] + " (" + map.get(dHand[0]) + ") | " + dHand[1] + " (" + map.get(dHand[1]) + ") | ");
+            System.out.print(dHand[0] + " (" + deck.getValue(dHand[0]) + ") | " + dHand[1] + " (" + deck.getValue(dHand[1]) + ") | ");
             System.out.println("Total: " + dTotal + "\nDealer Blackjack!");
         }
         //instant blackjack stuff
@@ -105,24 +80,24 @@ public class logic {
         int aceIndex = 0;
 
         cardCount++;
-        hand[cardCount - 1] = cardGeneration.cardGen(); //initializes that card
-        total += map.get(hand[cardCount - 1]); //adds the new card value to the total
+        hand[cardCount - 1] = deck.pullCard(); //initializes that card
+        total += deck.getValue(hand[cardCount - 1]); //adds the new card value to the total
 
         for (int i = 0; i < cardCount; i++) {
-            if (hand[i] == 'A') {
-                aceIndex = i; // marks the first occurence of an ace (11)
+            if (hand[i].charAt(0) == 'A') {
+                aceIndex = i; // marks the first occurrence of an ace (11)
                 hasAce = true; //checks hasAce
                 break;
             }
         }
-        if (total > 21 && hasAce) { //if the card has an ace and is over 21 then it sets the first occurence of an ace to a little ace then sets the total to what it would be without a high ace
-            hand[aceIndex] = 'a';
+        if (total > 21 && hasAce) { //if the card has an ace and is over 21 then it sets the first occurrence of an ace to a little ace then sets the total to what it would be without a high ace
+            hand[aceIndex] = hand[aceIndex].replace('A','a');
             total -= 10;
         }
 
         System.out.println("You:");
         for (int i = 0; i < cardCount; i++) {
-            System.out.print(hand[i] + " (" + map.get(hand[i]) + ") | ");
+            System.out.print(hand[i] + " (" + deck.getValue(hand[i]) + ") | ");
         }
         System.out.println("Total: " + total);
 
@@ -140,29 +115,29 @@ public class logic {
     }
 
     public void stand() {
-        //wont hit if dealer is over or at 17
+        //won't hit if dealer is over or at 17
         while (dTotal < 17) { // hits and stands on 17
             boolean hasAce = false;
             int aceIndex = 0;
             dCardCount++;
-            dHand[dCardCount - 1] = cardGeneration.cardGen();
-            dTotal += map.get(dHand[dCardCount - 1]);
+            dHand[dCardCount - 1] = deck.pullCard();
+            dTotal += deck.getValue(dHand[dCardCount - 1]);
 
             for (int i = 0; i < dCardCount; i++) {
-                if (dHand[i] == 'A') {
+                if (dHand[i].charAt(0) == 'A') {
                     aceIndex = i;
                     hasAce = true;
                     break;
                 }
             }
             if (dTotal > 21 && hasAce) {
-                dHand[aceIndex] = 'a';
+                dHand[aceIndex] = dHand[aceIndex].replace('A','a');
                 dTotal -= 10;
             }
         } //reveals dealer hand if over 17
         System.out.println("\nDealer:");
         for (int i = 0; i < dCardCount; i++) {
-            System.out.print(dHand[i] + " (" + map.get(dHand[i]) + ") | ");
+            System.out.print(dHand[i] + " (" + deck.getValue(dHand[i]) + ") | ");
         }
         System.out.println("Total: " + dTotal);
 
@@ -176,7 +151,7 @@ public class logic {
         }
     }
 
-    public void doubleDown() {
+    public void doubleDown() { //fix doubling down, make it so you cannot hit again after already doubling down that's just not how it works
         if (cardCount == 2 && money >= currentBet*2) {
             hit();
             currentBet *= 2;
@@ -184,10 +159,10 @@ public class logic {
             System.out.println("You can't double down!");
         }
     }
-    /* maybe hold off on this idk it'd be very difficult to work with and around
+    /* maybe hold off on this IDK it'd be very difficult to work with and around
        also splitting is when you have two of the same card and play two separate hands w two bets
     public void split() {
-        if (cardCount == 2 && map.get(hand[0]) == map.get(hand[1]) && money >= currentBet*2) {
+        if (cardCount == 2 && deck.getValue(hand[0]) == deck.getValue(hand[1]) && money >= currentBet*2) {
 
         } else {
             System.out.println("You can't split!");
@@ -233,7 +208,7 @@ public class logic {
         currentBet = x;
         if (money-currentBet < 0 || currentBet < 1) {
             System.out.println("You can't bet this much money!");
-        } //kinda want to make it so if you enter an invalid bet amount it automatically reprompts and gets a valid bet or maybe not idk
+        } //kinda want to make it so if you enter an invalid bet amount it automatically prompts and gets a valid bet or maybe not IDK
     }
     public int getMoney() {
         return money - currentBet; //returns the effective money balance

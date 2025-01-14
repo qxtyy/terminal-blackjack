@@ -10,8 +10,8 @@ public class Main {
 
         int bet;
 
-        System.out.println("General: c = continue / start new game, q = quit program, g = guide/help");
-        System.out.println("Betting: b = bet (optional), m = check money balance (you can only bet before starting a game)");
+        System.out.println("General: c = continue / start new game, q = quit program, D = deck size (default is one)");
+        System.out.println("Betting: b = bet (optional, you can only bet before starting a game), m = check money balance (NO CENTS.)");
         System.out.println("Game: h = hit, s = stand, d = double down, p = split (wip) ");
         System.out.println("Dealer stands on 17, Blackjack pays 3 to 2");
         do {
@@ -71,12 +71,43 @@ public class Main {
                         System.out.println("You can't bet during a game!");
                         break;
                     }
-                /*case 'p':
-                    //game.split();
-                    //break;*/
-                case 'g':
-                    System.out.println(); //aaaaaaaa
-                    break;
+                case 'D':
+                    if(!game.getState()) { //same logic for bets i mean works just the same
+                        boolean validInput = false;
+                        while (!validInput) {
+                            System.out.println("How many decks do you want? (1-8)");
+                            if (in.hasNextInt()) {
+                                int temp = in.nextInt();
+                                if (temp > 8) {
+                                    temp = 8;
+                                    System.out.println("Your selection has exceeded the maximum.");
+                                } else if (temp < 1) {
+                                    temp = 1;
+                                    System.out.println("Your selection has subceeded the minimum.");
+                                }
+                                logic.deckSize = temp;
+                                validInput = true;
+                                System.out.println("Deck size has been set to " + temp + " decks.");
+                                game.roll();
+                                break;
+                            } else {
+                                System.out.println("Please enter a number 1-8. ");
+                                in.next();
+                            }
+                        }
+                        break;
+                    } else {
+                        System.out.println("You can't alter the amount of decks during a game!");
+                        break;
+                    }
+                /*
+                case 'p':
+                    if (game.getState())  {
+                        game.split();
+                    } else {
+                        sout("You cant split)
+                        break;
+                 */
                 case 'm':
                     System.out.println("Current balance: " + game.getMoney() + "₪");
                     break;
